@@ -3,6 +3,7 @@ local pano = {}
 pano.PanoScreenGui = nil
 pano.n = 5
 pano.FOV = 360
+pano.World = {}
 pano.PanoramaContent = {}
 pano.panoramaconnection = nil
 pano.camtable = {}
@@ -11,7 +12,7 @@ function H2VFOV(fov,ratio)
 	return math.deg(2*math.atan(math.tan(math.rad(fov/2))*1/ratio))
 end
 
-function pano.set()
+function pano.set(listOfStuff)
 	if pano.PanoScreenGui then
 		pano.PanoScreenGui:Destroy()
 	end
@@ -28,7 +29,14 @@ function pano.set()
 	local cc = game.Workspace.CurrentCamera
 	pano.camtable = {}
 	pano.vptable = {}
-
+	local ViewPortObjects = nil
+	if listOfStuff then
+		ViewPortObjects = Instance.new("Folder")
+		for i,v in pairs(listOfStuff) do
+			v:Clone().Parent = ViewPortObjects
+		end
+	end
+	pano.World = listOfStuff
 	for i = 0,pano.n do
 		local vp = Instance.new("ViewportFrame")
 		vp.Size = UDim2.new(1/pano.n,0,1,0)
@@ -44,8 +52,7 @@ function pano.set()
 		cam.Name = i
 		vp.CurrentCamera = cam
 		table.insert(pano.camtable,cam)
-		table.insert(pano.vptable,vp)
-		local vpo = game.Workspace.ViewPortObjects:Clone()
+		local vpo = ViewPortObjects:Clone()
 		vpo.Parent = vp
 	end
 	pano.PanoScreenGui.Enabled = true

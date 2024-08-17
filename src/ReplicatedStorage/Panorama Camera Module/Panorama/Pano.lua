@@ -4,7 +4,6 @@ pano.PanoScreenGui = nil
 pano.n = 5
 pano.FOV = 360
 pano.World = {}
-pano.PanoramaContent = {}
 pano.panoramaconnection = nil
 pano.camtable = {}
 pano.vptable = {}
@@ -100,10 +99,8 @@ pano.panoramaconnection = game:GetService("RunService").PreRender:Connect(functi
 		local camCFR = cc.CFrame*angleOffset
 		local VFOV = H2VFOV(panoratio,ratio)	
 		for i,v in pairs(pano.camtable) do
-			spawn(function()
-				v.CFrame = camCFR*CFrame.Angles(0,math.rad(-panoratio)*(i-1),0)
-				v.FieldOfView = VFOV
-			end)
+			v.CFrame = camCFR*CFrame.Angles(0,math.rad(-panoratio)*(i-1),0)
+			v.FieldOfView = VFOV
 		end
 	end)
 	
@@ -117,5 +114,10 @@ function pano.quit()
 	pano.PanoScreenGui = nil
 end
 
-
+function pano.help()
+	print("[.set(a)   ] When you change the internal values of the module, you will need to call this so the panorama can update properly, where 'a' is the list of elements you want to render in the panorama.")
+	print("[.render() ] Creates a single snap shot of the panorama from your direction")
+	print("[.run()    ] Will render the panorama at run time.")
+	print("[.quit()   ] Will reset the panorama screen gui")
+end
 return pano

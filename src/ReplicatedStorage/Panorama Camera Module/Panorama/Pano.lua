@@ -16,6 +16,7 @@ function pano.set(listOfStuff)
 		pano.PanoScreenGui:Destroy()
 	end
 	local panorama = Instance.new("ScreenGui")
+	panorama.Archivable = false
 	panorama.Enabled = false
 	panorama.Name = "Panorama"
 	panorama.Parent = game.StarterGui
@@ -28,14 +29,10 @@ function pano.set(listOfStuff)
 	local cc = game.Workspace.CurrentCamera
 	pano.camtable = {}
 	pano.vptable = {}
-	local ViewPortObjects = nil
+	-- local ViewPortObjects = nil
 	if listOfStuff then
-		ViewPortObjects = Instance.new("Folder")
-		for i,v in pairs(listOfStuff) do
-			v:Clone().Parent = ViewPortObjects
-		end
+		pano.World = listOfStuff
 	end
-	pano.World = listOfStuff
 	for i = 0,pano.n do
 		local vp = Instance.new("ViewportFrame")
 		vp.Size = UDim2.new(1/pano.n,0,1,0)
@@ -51,8 +48,11 @@ function pano.set(listOfStuff)
 		cam.Name = i
 		vp.CurrentCamera = cam
 		table.insert(pano.camtable,cam)
-		local vpo = ViewPortObjects:Clone()
-		vpo.Parent = vp
+		for i,v in pairs(pano.World) do
+			local vpo = v:Clone()
+			vpo.Parent = vp
+	
+		end
 	end
 	pano.PanoScreenGui.Enabled = true
 	print("Panorama is ready to be set or rendered")
